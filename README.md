@@ -1,6 +1,6 @@
 # gh-cat
 
-Concatenate and print the contents of files from a remote GitHub repo
+Concatenate and print the contents of files from a remote GitHub repository
 
 ```
 Usage: gh cat repo path ...
