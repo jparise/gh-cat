@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! type -p curl >/dev/null; then
+  echo "curl not found on the system" >&2
+  exit 1
+fi
+
+version() {
+  echo "gh-cat v0.1.0"
+  exit
+}
+
+usage() {
+  cat <<EOF
+Usage: gh cat repo path ...
+
+Concatenate and print the contents of files in a GitHub repo
+
+Arguments:
+    repo            like: username/repo
+    path            file path within the repo
+
+Options:
+    -h, --help      print usage
+    -v, --version   print version
+    -V, --verbose   enable debug output
+    -b, --branch    branch or tag name
+
+Dependencies: curl
+
+Examples:
+    gh cat jparise/gh-cat README.md
+    gh cat jparise/gh-cat README.md gh-cat > file
+    gh cat cli/cli -b trunk README.md
+EOF
+  exit
+}
+
+repo=""
+branch=""
+paths=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h | --help)
+      usage
+      ;;
+    -v | --version)
+      version
+      ;;
+    -V | --verbose)
+      set -x
+      shift
+      ;;
+    -b | --branch)
+      branch="$2"
+      shift 2
+      ;;
+    *)
+      if [[ ! $repo ]]; then
+        repo="$1"
+      else
+        paths+=("$1")
+      fi
+      shift
+      ;;
+  esac
+done
+
+if [[ ! $repo || ${#paths[@]} == 0 ]]; then
+  usage
+fi
+
+if [[ ! $branch ]]; then
+  branch=$(gh api "repos/$repo" --jq '.default_branch')
+fi
+
+token=$(gh auth token)
+
+for path in "${paths[@]}"; do
+  curl -fsSL --oauth2-bearer "$token" \
+      "https://raw.githubusercontent.com/$repo/$branch/$path"
+done
