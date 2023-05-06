@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if ! type -p curl >/dev/null; then
-  echo "curl not found on the system" >&2
+  echo "error: curl not found on the system" >&2
   exit 1
 fi
 
