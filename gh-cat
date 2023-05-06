@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! type -p curl >/dev/null; then
-  echo "error: curl not found on the system" >&2
-  exit 1
-fi
-
 version() {
   echo "gh-cat v0.1.0"
   exit
@@ -70,6 +65,11 @@ done
 
 if [[ ! $repo || ${#paths[@]} == 0 ]]; then
   usage
+fi
+
+if ! type -p curl >/dev/null; then
+  echo "error: curl not found on the system" >&2
+  exit 1
 fi
 
 if [[ ! $repo =~ .*/.* ]]; then
