@@ -72,6 +72,11 @@ if [[ ! $repo || ${#paths[@]} == 0 ]]; then
   usage
 fi
 
+if [[ ! $repo =~ .*/.* ]]; then
+  user="$(gh config get -h github.com user)"
+  repo="$user/$repo"
+fi
+
 if [[ ! $branch ]]; then
   branch=$(gh api "repos/$repo" --jq '.default_branch')
 fi
