@@ -79,6 +79,7 @@ fi
 token=$(gh auth token)
 
 for path in "${paths[@]}"; do
-  curl -fsSL --oauth2-bearer "$token" \
-      "https://raw.githubusercontent.com/$repo/$branch/$path"
+  curl -fsL --oauth2-bearer "$token" \
+    "https://raw.githubusercontent.com/$repo/$branch/$path" ||
+    (echo "$repo: $path: not found or unavailable" >&2; exit 1)
 done
