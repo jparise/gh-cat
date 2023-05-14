@@ -26,7 +26,7 @@ Dependencies: curl
 
 Examples:
     gh cat jparise/gh-cat README.md
-    gh cat jparise/gh-cat README.md gh-cat > file
+    gh cat jparise/gh-cat README.md LICENSE > file
     gh cat cli/cli -b trunk README.md
 EOF
   exit
