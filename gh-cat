@@ -17,10 +17,10 @@ Arguments:
     path            file path within the repo
 
 Options:
+    -b, --branch    branch or tag name
     -h, --help      print usage
     -v, --version   print version
     -V, --verbose   enable debug output
-    -b, --branch    branch or tag name
 
 Dependencies: curl
 
