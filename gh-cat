@@ -2,7 +2,7 @@
 set -euo pipefail
 
 version() {
-  echo "gh-cat v1.0.0"
+  echo "gh-cat v1.1.0"
   exit
 }
 
