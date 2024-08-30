@@ -48,6 +48,7 @@ gh extension install jparise/gh-cat
 
 * [`curl`](https://curl.se/)
 * [`gh`](https://cli.github.com/)
+* [`bat`](https://github.com/sharkdp/bat) (optional)
 
 ## Examples
 
