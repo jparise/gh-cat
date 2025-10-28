@@ -85,7 +85,7 @@ for bin in curl gh; do
     exit 1
   fi
 done
-unset "$bin"
+unset bin
 
 if [[ ! $repo =~ .*/.* ]]; then
   user="$(gh config get -h github.com user)"
