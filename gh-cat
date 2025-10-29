@@ -93,7 +93,10 @@ if [[ ! $repo =~ .*/.* ]]; then
 fi
 
 if [[ ! $branch ]]; then
-  branch=$(gh api "repos/$repo" --jq '.default_branch')
+  if ! branch=$(gh api "repos/$repo" --jq '.default_branch' 2>&1); then
+    echo "error: repository '$repo' not found or inaccessible" >&2
+    exit 1
+  fi
 fi
 
 token=$(gh auth token)
