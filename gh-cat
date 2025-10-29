@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 version() {
   echo "gh-cat v1.1.0"
@@ -111,9 +111,36 @@ _cat() {
 }
 
 for path in "${paths[@]}"; do
+  set +e
   curl -fsL --oauth2-bearer "$token" \
-    "https://raw.githubusercontent.com/$repo/$branch/$path" | _cat "$path" || {
-      echo "$repo: $path: not found or unavailable" >&2
+    "https://raw.githubusercontent.com/$repo/$branch/$path" | _cat "$path"
+  exit_codes=("${PIPESTATUS[@]}")
+  set -e
+
+  if [[ ${exit_codes[1]} -ne 0 ]]; then
+    echo "$repo: $path: '$cmd' failed (error ${exit_codes[1]})" >&2
+    exit 1
+  fi
+
+  # https://everything.curl.dev/cmdline/exitcode
+  case ${exit_codes[0]} in
+    0)
+      ;;
+    6|7)
+      echo "$repo: $path: connection failed" >&2
       exit 1
-    }
+      ;;
+    22)
+      echo "$repo: $path: not found (HTTP 404)" >&2
+      exit 1
+      ;;
+    28)
+      echo "$repo: $path: operation timeout" >&2
+      exit 1
+      ;;
+    *)
+      echo "$repo: $path: curl error ${exit_codes[0]}" >&2
+      exit 1
+      ;;
+  esac
 done
