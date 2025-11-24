@@ -13,7 +13,7 @@ jobs:
   shellcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
 
@@ -22,7 +22,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup BATS
         uses: bats-core/bats-action@3.0.1
       - name: Authenticate GitHub CLI
