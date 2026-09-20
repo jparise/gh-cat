@@ -117,14 +117,12 @@ for path in "${paths[@]}"; do
   exit_codes=("${PIPESTATUS[@]}")
   set -e
 
-  if [[ ${exit_codes[1]} -ne 0 ]]; then
-    echo "$repo: $path: '$cmd' failed (error ${exit_codes[1]})" >&2
-    exit 1
-  fi
-
+  # curl is checked first: a failed fetch usually fails $cmd too. Exit code 23
+  # is the reverse: a write failure meaning $cmd exited and closed the pipe.
+  #
   # https://everything.curl.dev/cmdline/exitcode
   case ${exit_codes[0]} in
-    0)
+    0 | 23)
       ;;
     6|7)
       echo "$repo: $path: connection failed" >&2
@@ -143,4 +141,9 @@ for path in "${paths[@]}"; do
       exit 1
       ;;
   esac
+
+  if [[ ${exit_codes[1]} -ne 0 ]]; then
+    echo "$repo: $path: '$cmd' failed (error ${exit_codes[1]})" >&2
+    exit 1
+  fi
 done

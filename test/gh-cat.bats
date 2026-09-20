@@ -63,6 +63,14 @@ setup() {
   [[ "$output" == *"gh-cat"* ]]
 }
 
+@test "fetch failure is reported over cat command failure" {
+  # A failed fetch usually fails $cmd too; the fetch is the useful cause.
+  run "$GH_CAT" "$TEST_REPO" -c "grep -q NEVERMATCH" NONEXISTENT_FILE.md
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"not found (HTTP 404)"* ]]
+  [[ "$output" != *"grep"* ]]
+}
+
 # =============================================================================
 # Error Cases - Repository Validation
 # =============================================================================
