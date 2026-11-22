@@ -1,6 +1,18 @@
 # gh-cat
 
-Concatenate and print the contents of files from a remote GitHub repository
+Concatenate and print the contents of files from a remote GitHub repository.
+
+GitHub CLI [v2.95.0](https://github.com/cli/cli/releases/tag/v2.95.0) added
+`gh repo read-file` (still in preview as of v2.105.0). To read a single file,
+you don't need this extension:
+
+```sh
+gh repo read-file README.md -R jparise/gh-cat
+gh repo read-file README.md -R cli/cli --ref trunk
+```
+
+Use `gh-cat` to concatenate multiple files in one command or to automatically
+use `bat` for syntax highlighting when it's installed.
 
 ```
 Usage: gh cat repo path ...
